@@ -1,0 +1,101 @@
+import os
+import random
+import time
+
+def clear():
+    os.system("cls" if os.name == "nt" else "clear")
+
+cards = ["🍎","🍌","🥝","🍇","🍉","🍓","🍒","🍐"]
+cards = cards * 2
+
+#shuffle cards
+random.shuffle(cards)
+
+#hide cards
+hidden = ["❓"]*len(cards)
+matched = [False]*len(cards)
+TIME_LIMIT = 60 #seconds
+
+def display_board():
+    clear()
+
+    print("\n 🧠 Memory PUZZLE GAME!")
+    print("\n Match the pairs before the time runs out")
+
+    for i in range(len(cards)):
+        print(f" {i+1}: {hidden[i]}", end="\t")
+        if(i+1)%4 == 0:
+            print()
+    print()
+
+def play_game():
+    start = time.time()
+    matched_pairs = 0
+
+    while True:
+        elapsed = int(time.time() - start)
+        remaining = TIME_LIMIT - elapsed
+
+        if remaining <= 0:
+            print("⌛ Time out! You Lost.")
+            return
+        print(f"⌛ Time Left: {remaining}, seconds")
+        print(f" 🎯 Pairs Matched: {matched_pairs}/{len(cards)//2}\n")
+
+        try:
+            c1 = int(input("Pick card1 from (1- 16):")) - 1
+            c2 = int(input("Pick card 2 from (1-16):")) - 1
+
+        except ValueError:
+            print("❌ Invalid input. Use Numbers Only:")
+            time.sleep()
+            continue
+
+        if (c1<0 or c1>= len(cards) or
+            c2<0 or c2>= len(cards) or
+            c1==c2 or matched[c1] or matched[c2]):
+            print("❌ Invalid move! Try again.")
+            time.sleep(1)
+            continue
+
+    hidden[c1] = cards[c1]
+    hidden[c2] = cards[c2]
+    display_board()
+    time.sleep(1)
+
+    if cards[c1] == cards[c2]:
+        print("\n 🎉Match Found!")
+        matched[c1] = macthed[c2] = True
+        matched_pairs += 1
+
+    else:
+        print("\n ❌ Not a Match!")
+        hidden[c1]= "❓"
+        hidden[c2]= "❓"
+        
+    time.sleep(1)
+
+    if matched_pairs == (len(cards))//2:
+        print("\n🎉🎉 You Won!.All Pairs Mattched:")
+        return
+    
+    play_game()
+
+
+
+
+        
+
+                
+
+
+
+
+
+
+
+
+            
+        
+    
+    
